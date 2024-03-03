@@ -9,6 +9,9 @@ const cantProvincias = provincias.length;
 
 if (precio > 0){
     let provincia = prompt("Indique su provincia").toLowerCase();
+    while (!provincias.includes(provincia)){
+        provincia = prompt("Verifique que este bien escrita la provincia").toLowerCase();
+    }
     let encotroProvincia = true;
     let precioConImpuesto;
     for (let i=0; i <= cantProvincias; i++){
