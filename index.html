@@ -3,9 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>calculadora_impuestos_steam</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
+    <main class="container">
+        <section class="calculator">
+            <div class="calculator_title">
+                <img class="steam_image" src="https://seeklogo.com/images/S/steam-logo-37A2862F0B-seeklogo.com.png" alt="steam image">
+                <h1 class="title">Calculadora de impuestos de Steam</h1>
+            </div>
+
+            <p class="description">Ingrese un importe en US$</p>
+
+            <form class="operation">
+                <select class="provinciaSelect" id="provinciaSelect">
+                </select>
+                <input class="amount" id="amount" placeholder="US$" type="number">
+                <p class="error" id="error">Ingrese un número válido</p>
+                <button id="button" class="button" type="submit">Calcular</button>
+            </form>
+            <div class="price_div">
+                <p class="price_to_pay">Precio a Pagar: <p class="price" id="price"></p></p>
+            </div>
+        </section>  
+    </main>
     <script src="./js/index.js"></script>
 </body>
 </html>
