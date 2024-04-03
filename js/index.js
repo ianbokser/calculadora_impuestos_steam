@@ -39,7 +39,18 @@ impuestoProvincia.forEach(provincia => {
     select.appendChild(option);
 });
 
-const cantProvincias = impuestoProvincia.length;
+select.addEventListener("change", function(){
+    localStorage.clear();
+    let provinciaSelect = this.value;
+    localStorage.setItem("Provincia" , provinciaSelect)
+})
+
+window.onload = function() {
+    let Provincia = localStorage.getItem('Provincia');
+    if (Provincia) {
+        select.value = Provincia;
+    }
+};
 
 button.addEventListener("click", function(event) {
     event.preventDefault();
@@ -47,9 +58,9 @@ button.addEventListener("click", function(event) {
     let provinciaSelect = document.getElementById("provinciaSelect").value;
     let amount = document.getElementById("amount").value;
     if (verificarPrecio(amount)){
-        impuestoProvincia.forEach(function(provincia){
+        impuestoProvincia.forEach(async function(provincia){
             if(provinciaSelect === provincia.provincia){
-                    precioConImpuesto = impuesto(amount, provincia.porcentaje);
+                    precioConImpuesto = await impuesto(amount, provincia.porcentaje);
                     price.textContent = `$${precioConImpuesto} ARS`;
                 };
             }
@@ -59,13 +70,27 @@ button.addEventListener("click", function(event) {
     }
 });
 
-function impuesto(precio, impuestoProvincia){
-    let impuestoPais = 1.08;
-    let iva = 1.21;
-    let ganancias = 1.3;
-    let dolar = 1035;
-    let precioConImpuesto = precio * dolar * impuestoProvincia * impuestoPais * iva * ganancias;
-    return precioConImpuesto.toFixed(2).toString().split('.');
+async function impuesto(precio, impuestoProvincia){
+    let dolar = 0;
+    const ventaDolar = await obtenerVentaDolar();
+    if (ventaDolar !== null) {
+        let impuestoPais = 1.08;
+        let iva = 1.21;
+        let ganancias = 1.3;
+        dolar = ventaDolar;
+        let precioConImpuesto = precio * dolar * impuestoProvincia * impuestoPais * iva * ganancias;
+        return precioConImpuesto.toFixed(2).toString().split('.');
+    }
+}
+
+async function obtenerVentaDolar() {
+    try {
+        const response = await fetch("https://dolarapi.com/v1/dolares/blue");
+        const data = await response.json();
+        return data.venta;
+    } catch (error) {
+        return null;
+    }
 }
 
 function verificarProvincia(inputprovincia) {
