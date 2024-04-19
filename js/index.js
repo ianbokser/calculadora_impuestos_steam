@@ -72,22 +72,21 @@ button.addEventListener("click", function(event) {
 
 async function impuesto(precio, impuestoProvincia){
     let dolar = 0;
-    const ventaDolar = await obtenerVentaDolar();
-    if (ventaDolar !== null) {
+    const precioDolar = await obtenerPrecioDolar();
+    if (precioDolar !== null) {
         let impuestoPais = 1.08;
         let iva = 1.21;
         let ganancias = 1.3;
-        dolar = ventaDolar;
+        dolar = precioDolar;
         let precioConImpuesto = precio * dolar * impuestoProvincia * impuestoPais * iva * ganancias;
         return precioConImpuesto.toFixed(2).toString().split('.');
     }
 }
 
-async function obtenerVentaDolar() {
+async function obtenerPrecioDolar() {
     try {
-        const response = await fetch("https://dolarapi.com/v1/dolares/blue");
-        const data = await response.json();
-        return data.venta;
+        const response = await axios.get("https://dolarapi.com/v1/dolares/blue");
+        return response.data.venta;
     } catch (error) {
         return null;
     }
